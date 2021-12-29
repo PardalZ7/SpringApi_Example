@@ -3,6 +3,7 @@ package br.com.pardalZ7.API.resources;
 import br.com.pardalZ7.API.domain.DTO.UserDTO;
 import br.com.pardalZ7.API.domain.User;
 import br.com.pardalZ7.API.services.UserService;
+import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -40,6 +41,12 @@ public class UserResource {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(newUser.getId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> update(@PathVariable Integer id, @RequestBody @NotNull UserDTO userBody){
+        userBody.setId(id);
+        return ResponseEntity.ok().body(mapper.map(service.update(userBody), UserDTO.class));
     }
 
 }
