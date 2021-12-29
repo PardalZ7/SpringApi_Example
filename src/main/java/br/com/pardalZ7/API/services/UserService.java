@@ -1,4 +1,9 @@
 package br.com.pardalZ7.API.services;
 
-public class UserService {
+import br.com.pardalZ7.API.domain.User;
+
+public interface UserService {
+
+    User findById(Integer id);
+
 }
