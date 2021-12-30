@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
@@ -47,7 +48,21 @@ class UserServiceImplTest {
     }
 
     @Test
-    void create() {
+    void whenCreateThenReturnsSuccess() {
+        when(repository.save(any())).thenReturn(user);
+
+        User user = service.create(userDTO);
+
+        assertNotNull(user);
+        assertEquals(User.class, user.getClass());
+        assertEquals(ID, user.getId());
+        assertEquals(EMAIL, user.getEmail());
+        assertEquals(PASS, user.getPass());
+
+    }
+
+    @Test
+    void whenCreateThenReturnsDataIntegratyViolationException() {
     }
 
     @Test
