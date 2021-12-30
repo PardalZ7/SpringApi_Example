@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(UserDTO userDto) {
+        findById(userDto.getId());
         findByEmail(userDto);
         return repository.save(mapper.map(userDto, User.class));
     }
@@ -51,4 +52,9 @@ public class UserServiceImpl implements UserService {
             throw new DataIntegratyViolationException("Email already registered");
     }
 
+    @Override
+    public void deleteById(Integer id) {
+        findById(id);
+        repository.deleteById(id);
+    }
 }
