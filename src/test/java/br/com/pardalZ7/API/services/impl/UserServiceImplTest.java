@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -68,6 +69,7 @@ class UserServiceImplTest {
         try {
             optionalUser.get().setId(1);
             service.create(userDTO);
+            fail("Expecting DataIntegratyViolationException exception");
         } catch (Exception ex) {
             assertEquals(DataIntegratyViolationException.class, ex.getClass());
         }
@@ -92,6 +94,7 @@ class UserServiceImplTest {
 
         try {
             service.findById(ID);
+            fail("Expecting ObjectNotFoundException exception");
         } catch (Exception ex){
             assertEquals(ObjectNotFoundException.class, ex.getClass());
             assertEquals("User not found", ex.getMessage());
@@ -134,6 +137,7 @@ class UserServiceImplTest {
 
         try {
             service.update(userDTO);
+            fail("Expecting ObjectNotFoundException exception");
         } catch (Exception ex) {
             assertEquals(ObjectNotFoundException.class, ex.getClass());
         }
@@ -148,6 +152,7 @@ class UserServiceImplTest {
         try {
             optionalUser.get().setId(9);
             service.update(userDTO);
+            fail("Expecting DataIntegratyViolationException exception");
         } catch (Exception ex) {
             assertEquals(DataIntegratyViolationException.class, ex.getClass());
         }
@@ -168,6 +173,7 @@ class UserServiceImplTest {
 
         try {
             service.deleteById(ID);
+            fail("Expecting UserNotFound exception");
         } catch (Exception ex){
             assertEquals(ObjectNotFoundException.class, ex.getClass());
             assertEquals("User not found", ex.getMessage());
