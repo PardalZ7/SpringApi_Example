@@ -3,6 +3,7 @@ package br.com.pardalZ7.API.services.impl;
 import br.com.pardalZ7.API.domain.DTO.UserDTO;
 import br.com.pardalZ7.API.domain.User;
 import br.com.pardalZ7.API.repositories.UserRepository;
+import br.com.pardalZ7.API.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -10,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
@@ -62,7 +64,30 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findAll() {
+    void whenFindByIdThenReturnsAnObjectNotFoundException(){
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("User not found"));
+
+        try {
+            service.findById(ID);
+        } catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals("User not found", ex.getMessage());
+        }
+    }
+
+    @Test
+    void whenFinAllThenReturnsAnListOfUsers() {
+        when(repository.findAll()).thenReturn(List.of(user));
+
+        List<User> response = service.findAll();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+
+        assertEquals(User.class, response.get(0).getClass());
+        assertEquals(ID, response.get(0).getId());
+        assertEquals(EMAIL, response.get(0).getEmail());
+        assertEquals(PASS, response.get(0).getPass());
     }
 
     @Test
