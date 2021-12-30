@@ -3,6 +3,7 @@ package br.com.pardalZ7.API.services.impl;
 import br.com.pardalZ7.API.domain.DTO.UserDTO;
 import br.com.pardalZ7.API.domain.User;
 import br.com.pardalZ7.API.repositories.UserRepository;
+import br.com.pardalZ7.API.services.exceptions.DataIntegratyViolationException;
 import br.com.pardalZ7.API.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +17,7 @@ import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 class UserServiceImplTest {
@@ -63,6 +63,14 @@ class UserServiceImplTest {
 
     @Test
     void whenCreateThenReturnsDataIntegratyViolationException() {
+        when(repository.findByEmail(anyString())).thenReturn(optionalUser);
+
+        try {
+            optionalUser.get().setId(1);
+            service.create(userDTO);
+        } catch (Exception ex) {
+            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+        }
     }
 
     @Test
