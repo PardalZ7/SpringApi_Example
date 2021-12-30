@@ -167,7 +167,7 @@ class UserServiceImplTest {
         when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("User not found"));
 
         try {
-            service.findById(ID);
+            service.deleteById(ID);
         } catch (Exception ex){
             assertEquals(ObjectNotFoundException.class, ex.getClass());
             assertEquals("User not found", ex.getMessage());
