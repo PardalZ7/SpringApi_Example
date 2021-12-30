@@ -18,7 +18,7 @@ import java.util.Optional;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class UserServiceImplTest {
 
@@ -155,7 +155,23 @@ class UserServiceImplTest {
     }
 
     @Test
-    void deleteById() {
+    void whenDeleteThenReturnSuccess() {
+        when(repository.findById(anyInt())).thenReturn(this.optionalUser);
+        doNothing().when(repository).deleteById(anyInt());
+        service.deleteById(ID);
+        verify(repository, times(1)).deleteById(anyInt());
+    }
+
+    @Test
+    void whenDeleteThenReturnsAnObjectNotFoundException(){
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("User not found"));
+
+        try {
+            service.findById(ID);
+        } catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals("User not found", ex.getMessage());
+        }
     }
 
     private void startData(){
