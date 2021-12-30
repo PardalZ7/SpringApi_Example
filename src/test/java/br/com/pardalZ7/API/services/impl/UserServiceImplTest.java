@@ -129,6 +129,18 @@ class UserServiceImplTest {
     }
 
     @Test
+    void whenUpdateThenReturnsAnObjectNotFoundException() {
+        when(repository.save(any())).thenReturn(this.user);
+
+        try {
+            User response = service.update(userDTO);
+        } catch (Exception ex) {
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+        }
+
+    }
+
+    @Test
     void deleteById() {
     }
 
