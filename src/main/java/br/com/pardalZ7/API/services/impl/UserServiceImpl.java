@@ -23,15 +23,15 @@ public class UserServiceImpl implements UserService {
     private ModelMapper mapper;
 
     @Override
-    public User create(UserDTO userDto) {
-        findByEmail(userDto);
-        return repository.save(mapper.map(userDto, User.class));
+    public User create(UserDTO userDTO) {
+        findByEmail(userDTO);
+        return repository.save(mapper.map(userDTO, User.class));
     }
 
     @Override
     public User findById(Integer id) {
         Optional<User> user = repository.findById(id);
-        return user.orElseThrow(() -> new ObjectNotFoundException("User not found, id: " + id));
+        return user.orElseThrow(() -> new ObjectNotFoundException("User not found"));
     }
 
     @Override
@@ -40,15 +40,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(UserDTO userDto) {
-        findById(userDto.getId());
-        findByEmail(userDto);
-        return repository.save(mapper.map(userDto, User.class));
+    public User update(UserDTO userDTO) {
+        findById(userDTO.getId());
+        findByEmail(userDTO);
+        return repository.save(mapper.map(userDTO, User.class));
     }
 
-    private void findByEmail(UserDTO userDto) {
-        Optional<User> user = repository.findByEmail(userDto.getEmail());
-        if (user.isPresent() && !user.get().getId().equals(userDto.getId()))
+    private void findByEmail(UserDTO userDTO) {
+        Optional<User> user = repository.findByEmail(userDTO.getEmail());
+        if (user.isPresent() && !user.get().getId().equals(userDTO.getId()))
             throw new DataIntegratyViolationException("Email already registered");
     }
 

@@ -133,9 +133,23 @@ class UserServiceImplTest {
         when(repository.save(any())).thenReturn(this.user);
 
         try {
-            User response = service.update(userDTO);
+            service.update(userDTO);
         } catch (Exception ex) {
             assertEquals(ObjectNotFoundException.class, ex.getClass());
+        }
+
+    }
+
+    @Test
+    void whenUpdateThenReturnsAnDataIntegratyViolationException() {
+        when(repository.findByEmail(any())).thenReturn(optionalUser);
+        when(repository.findById(anyInt())).thenReturn(this.optionalUser);
+
+        try {
+            optionalUser.get().setId(9);
+            service.update(userDTO);
+        } catch (Exception ex) {
+            assertEquals(DataIntegratyViolationException.class, ex.getClass());
         }
 
     }
