@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter @Setter
 @AllArgsConstructor
-public class StadardError {
+public class StandardError {
 
     private LocalDateTime timeStamp;
     private Integer status;

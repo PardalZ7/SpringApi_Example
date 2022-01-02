@@ -3,7 +3,7 @@ package br.com.pardalZ7.API.services.impl;
 import br.com.pardalZ7.API.domain.DTO.UserDTO;
 import br.com.pardalZ7.API.domain.User;
 import br.com.pardalZ7.API.repositories.UserRepository;
-import br.com.pardalZ7.API.services.exceptions.DataIntegratyViolationException;
+import br.com.pardalZ7.API.services.exceptions.DataIntegrityViolationException;
 import br.com.pardalZ7.API.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -63,16 +62,10 @@ class UserServiceImplTest {
     }
 
     @Test
-    void whenCreateThenReturnsDataIntegratyViolationException() {
+    void whenCreateThenReturnsDataIntegrityViolationException() {
         when(repository.findByEmail(anyString())).thenReturn(optionalUser);
-
-        try {
-            optionalUser.get().setId(1);
-            service.create(userDTO);
-            fail("Expecting DataIntegratyViolationException exception");
-        } catch (Exception ex) {
-            assertEquals(DataIntegratyViolationException.class, ex.getClass());
-        }
+        optionalUser.get().setId(999);
+        assertThrows(DataIntegrityViolationException.class, () -> service.create(userDTO));
     }
 
     @Test
@@ -154,7 +147,7 @@ class UserServiceImplTest {
             service.update(userDTO);
             fail("Expecting DataIntegratyViolationException exception");
         } catch (Exception ex) {
-            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
         }
 
     }
