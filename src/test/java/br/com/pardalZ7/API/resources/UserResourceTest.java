@@ -108,7 +108,24 @@ class UserResourceTest {
     }
 
     @Test
-    void update() {
+    void whenUpdateThenReturnSuccess() {
+
+        when(service.update(this.userDTO)).thenReturn(this.user);
+        when(mapper.map(this.user, UserDTO.class)).thenReturn(this.userDTO);
+
+        ResponseEntity<UserDTO> response = resource.update(ID, this.userDTO);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        UserDTO localUser = response.getBody();
+        assertEquals(UserDTO.class, localUser.getClass());
+
+        assertEquals(ID, localUser.getId());
+        assertEquals(NAME, localUser.getName());
+        assertEquals(EMAIL, localUser.getEmail());
+        assertEquals(PASS, localUser.getPass());
+
     }
 
     @Test
