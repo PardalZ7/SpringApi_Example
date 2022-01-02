@@ -10,7 +10,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,6 +60,7 @@ class UserResourceTest {
         ResponseEntity<UserDTO> response = resource.findById(ID);
 
         assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(UserDTO.class, response.getBody().getClass());
 
@@ -68,7 +72,26 @@ class UserResourceTest {
     }
 
     @Test
-    void findAll() {
+    void whenFindAllThenReturnAnListOfUserDTO() {
+
+        when(service.findAll()).thenReturn(List.of(this.user));
+        when(mapper.map(this.user, UserDTO.class)).thenReturn(this.userDTO);
+
+        ResponseEntity<List<UserDTO>> response = resource.findAll();
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+
+        UserDTO user01 = response.getBody().get(0);
+        assertEquals(UserDTO.class, user01.getClass());
+
+        assertEquals(ID, user01.getId());
+        assertEquals(NAME, user01.getName());
+        assertEquals(EMAIL, user01.getEmail());
+        assertEquals(PASS, user01.getPass());
+
     }
 
     @Test
