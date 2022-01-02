@@ -10,6 +10,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
+
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class UserResourceTest {
@@ -44,7 +49,22 @@ class UserResourceTest {
     }
 
     @Test
-    void findById() {
+    void whenFindByIdThenReturnSuccess() {
+
+        when(service.findById(ID)).thenReturn(this.user);
+        when(mapper.map(this.user, UserDTO.class)).thenReturn(this.userDTO);
+
+        ResponseEntity<UserDTO> response = resource.findById(ID);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(UserDTO.class, response.getBody().getClass());
+
+        assertEquals(ID, this.user.getId());
+        assertEquals(NAME, this.user.getName());
+        assertEquals(EMAIL, this.user.getEmail());
+        assertEquals(PASS, this.user.getPass());
+
     }
 
     @Test
