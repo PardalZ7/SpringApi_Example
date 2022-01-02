@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -63,16 +62,10 @@ class UserServiceImplTest {
     }
 
     @Test
-    void whenCreateThenReturnsDataIntegratyViolationException() {
+    void whenCreateThenReturnsDataIntegrityViolationException() {
         when(repository.findByEmail(anyString())).thenReturn(optionalUser);
-
-        try {
-            optionalUser.get().setId(1);
-            service.create(userDTO);
-            fail("Expecting DataIntegratyViolationException exception");
-        } catch (Exception ex) {
-            assertEquals(DataIntegrityViolationException.class, ex.getClass());
-        }
+        optionalUser.get().setId(999);
+        assertThrows(DataIntegrityViolationException.class, () -> service.create(userDTO));
     }
 
     @Test
