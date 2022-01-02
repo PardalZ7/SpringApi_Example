@@ -4,7 +4,7 @@ import br.com.pardalZ7.API.domain.DTO.UserDTO;
 import br.com.pardalZ7.API.domain.User;
 import br.com.pardalZ7.API.repositories.UserRepository;
 import br.com.pardalZ7.API.services.UserService;
-import br.com.pardalZ7.API.services.exceptions.DataIntegratyViolationException;
+import br.com.pardalZ7.API.services.exceptions.DataIntegrityViolationException;
 import br.com.pardalZ7.API.services.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     private void findByEmail(UserDTO userDTO) {
         Optional<User> user = repository.findByEmail(userDTO.getEmail());
         if (user.isPresent() && !user.get().getId().equals(userDTO.getId()))
-            throw new DataIntegratyViolationException("Email already registered");
+            throw new DataIntegrityViolationException("Email already registered");
     }
 
     @Override

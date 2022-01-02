@@ -1,5 +1,6 @@
 package br.com.pardalZ7.API.resources.exceptions;
 
+import br.com.pardalZ7.API.services.exceptions.DataIntegrityViolationException;
 import br.com.pardalZ7.API.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,12 @@ class ResourceExceptionHandlerTest {
     }
 
     @Test
-    void dataIntegratyViolation() {
+    void whenDataIntegrityViolationThenReturnAResponseEntity() {
+        ResponseEntity<StandardError> response = exceptionHandler
+                .DataIntegrityViolation(new DataIntegrityViolationException("Email already registered"), new MockHttpServletRequest());
+
+        assertNotNull(response);
+        assertEquals(StandardError.class, response.getBody().getClass());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 }

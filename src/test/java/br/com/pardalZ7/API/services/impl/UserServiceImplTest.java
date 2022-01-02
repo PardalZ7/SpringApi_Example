@@ -3,7 +3,7 @@ package br.com.pardalZ7.API.services.impl;
 import br.com.pardalZ7.API.domain.DTO.UserDTO;
 import br.com.pardalZ7.API.domain.User;
 import br.com.pardalZ7.API.repositories.UserRepository;
-import br.com.pardalZ7.API.services.exceptions.DataIntegratyViolationException;
+import br.com.pardalZ7.API.services.exceptions.DataIntegrityViolationException;
 import br.com.pardalZ7.API.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,7 +71,7 @@ class UserServiceImplTest {
             service.create(userDTO);
             fail("Expecting DataIntegratyViolationException exception");
         } catch (Exception ex) {
-            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
         }
     }
 
@@ -154,7 +154,7 @@ class UserServiceImplTest {
             service.update(userDTO);
             fail("Expecting DataIntegratyViolationException exception");
         } catch (Exception ex) {
-            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
         }
 
     }

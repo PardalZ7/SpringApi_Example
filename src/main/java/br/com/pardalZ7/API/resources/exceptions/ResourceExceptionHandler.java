@@ -1,6 +1,6 @@
 package br.com.pardalZ7.API.resources.exceptions;
 
-import br.com.pardalZ7.API.services.exceptions.DataIntegratyViolationException;
+import br.com.pardalZ7.API.services.exceptions.DataIntegrityViolationException;
 import br.com.pardalZ7.API.services.exceptions.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +22,8 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-    @ExceptionHandler(DataIntegratyViolationException.class)
-    public ResponseEntity<StandardError> DataIntegratyViolation(DataIntegratyViolationException ex, HttpServletRequest request) {
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandardError> DataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
         StandardError error = StandardError.builder()
                 .timeStamp(LocalDateTime.now()).error(ex.getMessage()).status(HttpStatus.BAD_REQUEST.value())
                 .path(request.getRequestURI())
